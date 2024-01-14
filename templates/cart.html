@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Магазин</title>
-    <link rel="stylesheet" href="{% static '1.css' %}">
+    <link rel="stylesheet" href="{% static '2.css' %}">
 </head>
 <body>
     <h2>Корзина</h2>
@@ -16,11 +16,11 @@
         {% for one in tovari %}
             <tr>
                <td>{{ one.tovar.name }}</td>
-                <td><a href="">
+                <td><a href="{% url 'count' -1 one.id %}">
                     <button> - </button>
                 </a> </td>
                <td>{{ one.count }}шт</td>
-                <td><a href="">
+                <td><a href="{% url 'count' 1 one.id %}">
                     <button> + </button>
                 </a> </td>
                <td>{{ one.summa }}р</td>
