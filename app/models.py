@@ -31,4 +31,4 @@ class Order(models.Model):
     email = models.CharField(max_length=50)
     total = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    myzakaz = models.TimeField()
+    myzakaz = models.TextField()

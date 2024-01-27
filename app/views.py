@@ -1,21 +1,48 @@
 from django.shortcuts import render, redirect
 from .models import *
+from .forms import *
 # Create your views here.
+
+
 def index(req):
     items = Tovar.objects.all()
-    data={'tovar':items}
-    return  render(req, 'index.html', data)
+    data = {'tovar': items}
+    return render(req, 'index.html', data)
+
 
 def toCart(req):
-    items = Cart.objects.all()
-    total=0
+    items = Cart.objects.filter(user=req.user)
+    forma = OrderForm()
+    total = 0
     for i in items:
         total += i.calcSumma()
-        total = round(total,2)  # округление цены
-    data={'tovari':items, 'total':total}
-    return render(req, 'cart.html',data)
+    total = round(total,2)  # округление цены
+    if req.POST:
+        forma = OrderForm(req.POST)
+        k1 = req.POST.get('adres')
+        k2 = req.POST.get('tel')
+        k3 = req.POST.get('email')
+        if forma.is_valid():
+            print(k1, k2, k3)
+            k1 = forma.cleaned_data.get('adres')
+            k2 = forma.cleaned_data.get('tel')
+            k3 = forma.cleaned_data.get('email')
+            print(k1, k2, k3)
+            myzakaz=''
+            for one in items:
+                myzakaz += one.tovar.name+' '
+                myzakaz += 'количество '+str(one.count)+' '
+                myzakaz += 'сумма '+str(one.summa)+' '
+                myzakaz += 'скидка '+str(one.tovar.discount)+' '
+            Order.objects.create(adres=k1, tel=k2, email=k3,
+                                 total=total, myzakaz='myazakaz',
+                                 user=req.user)
+            items.delete()
+            return render(req,'sps.html')
+    data = {'tovari': items, 'total': total, 'formaorder': forma}
+    return render(req, 'cart.html', data)
 
-def buy(req,id):
+def buy(req, id):
     item = Tovar.objects.get(id=id)
     curuser = req.user
     if Cart.objects.filter(tovar=item, user=curuser):
@@ -25,13 +52,15 @@ def buy(req,id):
         getTovar.save()
     else:
         Cart.objects.create(tovar=item, count=1, user=curuser, summa=item.price)
-    data={}
+    data = {}
     return redirect('home')
 
-def delete(req,id):
+
+def delete(req, id):
     item = Cart.objects.get(id=id)
     item.delete()
     return redirect('tocart')
+
 
 def cartCount(req, num, id):
     num = int(num)

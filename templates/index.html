@@ -7,13 +7,31 @@
     <link rel="stylesheet" href="{% static '1.css' %}">
 </head>
 <body>
-    <h2>Магазин</h2>
-    <header>
-        <a href="{% url 'home' %}">Главная</a>
-        <a href="{% url 'tocart' %}">Корзина</a>
-    </header>
-    <main>
-        {% for one in tovar %}
+
+<div id="radiobells_container"><a id="RP_link">Онлайн радио</a>
+</div>
+<link href="https://www.radiobells.com/script/style.css" type="text/css" rel="stylesheet"/>
+<script type="text/javascript">var rad_backcolor = "#434242";
+var rad_logo = "black";
+var rad_autoplay = false;
+var rad_width = "responsive";
+var rad_width_px = 330;
+var rad_stations = [['https://ep256.hostingradio.ru:8052/europaplus256.mp3',
+    'Европа плюс', 'europaplus'], ['https://pub0101.101.ru/stream/air/aac/64/100',
+    'Авторадио', 'avtoradio'], ['https://rusradio.hostingradio.ru/rusradio96.aacp',
+    'Русское радио', 'russradio'], ['https://radiorecord.hostingradio.ru/sd9096.aacp',
+    'Супердискотека 90-х', 'super90'], ['https://listen1.myradio24.com/6262',
+    'Спокойное радио', 'spokoinoe'], ['https://icecast-vgtrk.cdnvideo.ru/rrzonam_mp3_192kbps',
+    'Радио России', 'radiorossii']];</script>
+<script type="text/javascript" src="https://www.radiobells.com/script/v2_1.js" charset="UTF-8"></script>
+
+<h2>Магазин</h2>
+<header>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'tocart' %}">Корзина</a>
+</header>
+<main>
+    {% for one in tovar %}
         <div class="cart">
             <img src="{% static one.image %}" alt="">
             <p>{{ one.name }}</p>
@@ -23,7 +41,7 @@
             </a>
 
         </div>
-        {% endfor %}
-    </main>
+    {% endfor %}
+</main>
 </body>
 </html>
